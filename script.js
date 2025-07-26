@@ -100,7 +100,8 @@ pauseBtn.addEventListener('click', () => {
   else pauseGame();
 });
 document.addEventListener('keydown', e => {
-  if (e.key === ' ' && running) {
+  if (e.key === ' ' && running && !instructionsOverlay.classList.contains('hidden') === false) {
+    e.preventDefault();
     if (paused) resumeGame();
     else pauseGame();
   }
@@ -118,6 +119,8 @@ function showInstructions() {
 function hideInstructions() {
   instructionsOverlay.classList.add('hidden');
   if (!wasPausedBeforeInstructions && running) resumeGame();
+  // Return focus to canvas for immediate keyboard control
+  setTimeout(() => canvas.focus(), 100);
 }
 instructionsBtn.addEventListener('click', showInstructions);
 closeInstructionsBtn.addEventListener('click', hideInstructions);
@@ -136,6 +139,8 @@ function startGame() {
   gameStarted = true;
   startGameOverlay.classList.add('hidden');
   resetGame();
+  // Return focus to canvas for immediate keyboard control
+  setTimeout(() => canvas.focus(), 100);
 }
 startGameBtn.addEventListener('click', startGame);
 
@@ -217,21 +222,37 @@ function gameOver() {
 // --- Drawing ---
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // Draw grid
-  ctx.strokeStyle = COLORS.grid;
+  
+  // Draw pixel-perfect grid
+  const TILE = canvas.width / GRID_SIZE;
+  ctx.strokeStyle = '#232526';
   ctx.lineWidth = 1;
+  
+  // Ensure pixel-perfect alignment
+  ctx.save();
+  ctx.translate(0.5, 0.5);
+  
+  // Vertical lines
   for (let i = 0; i <= GRID_SIZE; i++) {
+    const x = Math.floor(i * TILE);
     ctx.beginPath();
-    ctx.moveTo(i * canvas.width / GRID_SIZE, 0);
-    ctx.lineTo(i * canvas.width / GRID_SIZE, canvas.height);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(0, i * canvas.height / GRID_SIZE);
-    ctx.lineTo(canvas.width, i * canvas.height / GRID_SIZE);
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
     ctx.stroke();
   }
+  
+  // Horizontal lines
+  for (let i = 0; i <= GRID_SIZE; i++) {
+    const y = Math.floor(i * TILE);
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+  
+  ctx.restore();
+  
   // Draw Food (glowing, pulsing neon circle)
-  let TILE = canvas.width / GRID_SIZE;
   let t = performance.now() * 0.005;
   ctx.save();
   ctx.shadowColor = "#fffa44";
@@ -242,6 +263,7 @@ function draw() {
   ctx.fill();
   ctx.shadowBlur = 0;
   ctx.restore();
+  
   // Draw Snake (glowing circles, head with eyes)
   for (let i = snake.length-1; i >= 0; i--) {
     ctx.save();
@@ -274,10 +296,6 @@ function draw() {
     }
     ctx.restore();
   }
-  // Draw border
-  ctx.strokeStyle = COLORS.border;
-  ctx.lineWidth = 5;
-  ctx.strokeRect(0, 0, canvas.width, canvas.height);
 }
 
 // --- Controls ---
@@ -307,7 +325,7 @@ canvas.addEventListener('keydown', handleKey);
 // --- Settings Events ---
 borderWrapEl.addEventListener('change', () => {
   wrapBorders = borderWrapEl.checked;
-  resetGame();
+  // Apply setting immediately without restarting the game
 });
 speedSlider.addEventListener('input', () => {
   speedIdx = parseInt(speedSlider.value) - 1;
