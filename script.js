@@ -13,8 +13,11 @@ const pauseBtn = document.getElementById('pause-btn');
 const instructionsBtn = document.getElementById('instructions-btn');
 const instructionsOverlay = document.getElementById('instructions-overlay');
 const closeInstructionsBtn = document.getElementById('close-instructions');
+const startGameOverlay = document.getElementById('start-game-overlay');
+const startGameBtn = document.getElementById('start-game-btn');
 let wasPausedBeforeInstructions = false;
 let paused = false;
+let gameStarted = false;
 
 // --- Game Constants ---
 const GRID_SIZE = 20;
@@ -128,6 +131,14 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// --- Start Game Logic ---
+function startGame() {
+  gameStarted = true;
+  startGameOverlay.classList.add('hidden');
+  resetGame();
+}
+startGameBtn.addEventListener('click', startGame);
+
 // --- Game Logic ---
 function resetGame() {
   snake = INIT_SNAKE.map(seg => ({...seg}));
@@ -142,6 +153,11 @@ function resetGame() {
   draw();
   paused = false;
   updatePauseBtn();
+  
+  // Only start the game loop if the game has been started
+  if (gameStarted) {
+    loop();
+  }
 }
 function placeFood() {
   while (true) {
@@ -154,7 +170,7 @@ function placeFood() {
   }
 }
 function loop() {
-  if (!running || paused) return;
+  if (!running || paused || !gameStarted) return;
   moveTimer = setTimeout(() => {
     move();
     draw();
@@ -316,6 +332,18 @@ function init() {
   updateSettingsUI();
   resizeCanvas();
   canvas.focus();
-  resetGame();
+  
+  // Initialize game state but don't start until user clicks start
+  snake = INIT_SNAKE.map(seg => ({...seg}));
+  dir = {...INIT_DIR};
+  nextDir = {...INIT_DIR};
+  placeFood();
+  score = 0;
+  running = false;
+  updateScoresUI();
+  draw();
+  
+  // Show start overlay
+  startGameOverlay.classList.remove('hidden');
 }
 window.onload = init; 
