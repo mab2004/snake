@@ -268,6 +268,46 @@ body {
 #instructions-overlay.hidden {
   display: none;
 }
+#start-game-overlay .game-over-box {
+  background: #151515;
+  border: 5px solid #39ff14;
+  border-radius: 22px;
+  box-shadow: 0 0 48px #39ff14a0, 0 0 12px #ff3131a0;
+  padding: 2.5rem 2rem 2rem 2rem;
+  text-align: center;
+  color: #fff;
+  font-size: 1.1rem;
+  min-width: 280px;
+  font-family: 'Press Start 2P', monospace;
+}
+#start-game-overlay h2 {
+  color: #39ff14;
+  margin-bottom: 1.2rem;
+  font-size: 1.3rem;
+  text-shadow: 0 0 4px #39ff14;
+}
+#start-game-overlay p {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #fff;
+}
+#start-game-btn {
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  font-family: 'Press Start 2P', monospace;
+  background: #39ff14;
+  color: #101014;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #39ff14a0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#start-game-btn:hover {
+  background: #baff39;
+  color: #101014;
+}
 #instructions-overlay .game-over-box {
   background: #151515;
   border: 5px solid #39ff14;
