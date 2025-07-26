@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNAKE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="game-area">
+      <div class="ui-overlay">
+        <div class="app-title">SNAKE</div>
+        
+        <div class="score-section">
+          <div class="score-label">Score</div>
+          <div id="score" class="score-value">0</div>
+          <div class="score-label">High Score</div>
+          <div id="high-score" class="score-value">0</div>
+          <div class="score-label">Recent Scores</div>
+          <ul id="recent-scores" class="recent-scores"></ul>
+        </div>
+        
+        <div class="settings-section">
+          <div class="settings-title">Settings</div>
+          <div class="setting-item">
+            <label for="border-wrap">Wrap Borders</label>
+            <input type="checkbox" id="border-wrap" checked>
+          </div>
+          <div class="setting-item slider-row">
+            <label for="speed-slider">Snake Speed</label>
+            <input type="range" id="speed-slider" min="1" max="10" value="5">
+            <div class="slider-labels">
+              <span>Slow</span>
+              <span>Normal</span>
+              <span>Fast</span>
+            </div>
+          </div>
+          <div class="setting-item">
+            <button id="pause-btn" type="button">Pause</button>
+          </div>
+          <div class="setting-item">
+            <button id="instructions-btn" type="button">Instructions</button>
+          </div>
+        </div>
+      </div>
+      
+      <canvas id="game-canvas" tabindex="0"></canvas>
+      
+      <div id="game-over" class="game-over hidden">
+        <div class="game-over-box">
+          <h2>Game Over</h2>
+          <div id="final-score"></div>
+          <button id="try-again">Try Again</button>
+        </div>
+      </div>
+      
+      <div id="instructions-overlay" class="game-over hidden">
+        <div class="game-over-box">
+          <h2>Controls & How to Play</h2>
+          <ul>
+            <li>Move: <b>Arrow Keys</b> or <b>WASD</b></li>
+            <li>Eat food to grow and score</li>
+            <li>Avoid hitting yourself</li>
+            <li>Toggle border wrap in settings</li>
+            <li>Pause: <b>Spacebar</b> or Pause button</li>
+            <li>Show instructions: <b>I</b> or <b>Tab</b></li>
+          </ul>
+          <button id="close-instructions">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html> 
